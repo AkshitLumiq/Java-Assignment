@@ -1,0 +1,73 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+`import java.util.Comparator;
+import java.util.Collections;
+
+class Student {
+  int id;
+  String name;
+  double cgpa;
+
+  int getID() {
+    return this.id;
+  }
+
+  String getName() {
+    return this.name;
+  }
+
+  double getCGPA() {
+    return this.cgpa;
+  }
+
+  Student(int id, String name, double cgpa) {
+    this.id = id;
+    this.name = name;
+    this.cgpa = cgpa;
+  }
+}
+
+class compareStudent implements Comparator<Student> {
+  @Override
+  public int compare(Student s1, Student s2) {
+    int cgpaDiff =(int) ((s2.getCGPA() - s1.getCGPA()) * 100);
+    if(cgpaDiff != 0)
+      return cgpaDiff;
+    else{
+      int nameDiff = s1.getName().compareTo(s2.getName());
+      if(nameDiff != 0)
+        return nameDiff;
+    }
+    return s1.getID() - s2.getID();
+  }
+}
+
+class Priorities {
+  List<Student> getStudents(List<String> events) {
+    compareStudent cs = new compareStudent();
+    ArrayList<Student> st = new ArrayList<>();
+
+    for (String i : events) {
+      Scanner sc = new Scanner(i);
+      String stat, name;
+      double cgpa;
+      int id;
+
+      stat = sc.next();
+      if (stat.compareTo("ENTER") == 0) {
+        name = sc.next();
+        cgpa = sc.nextDouble();
+        id = sc.nextInt();
+        Student newS = new Student(id, name, cgpa);
+        st.add(newS);
+      } else {
+        Collections.sort(st, cs);
+        st.remove(0);
+      }
+      sc.close();
+    }
+    return st;
+  }
+}
+
